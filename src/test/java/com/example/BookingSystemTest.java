@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BookingSystemTest {
@@ -81,5 +82,19 @@ class BookingSystemTest {
         assertThatThrownBy(() -> bookingSystem.bookRoom(roomId, startTime, endTime))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Rummet existerar inte");
+    }
+
+    @Test
+    void BookRoomRoomIsNotAvailable() {
+        String roomId = "1";
+        LocalDateTime startTime = LocalDateTime.now().plusDays(1);
+        LocalDateTime endTime = startTime.plusHours(1);
+
+        when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
+        Room room = mock(Room.class);
+        when(room.isAvailable(startTime, endTime)).thenReturn(false);
+        when(roomRepository.findById(roomId)).thenReturn(Optional.of(room));
+        boolean result = bookingSystem.bookRoom(roomId, startTime, endTime);
+        assertThat(result).isFalse();
     }
 }
