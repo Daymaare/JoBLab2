@@ -56,6 +56,17 @@ class BookingSystemTest {
         LocalDateTime endTime = LocalDateTime.now();
         when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
         assertThatThrownBy(() -> bookingSystem.bookRoom("1", startTime, endTime))
-                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Kan inte boka tid i dåtid");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Kan inte boka tid i dåtid");
+    }
+
+    @Test
+    void BookRoomTimeIsAfter() {
+        LocalDateTime startTime = LocalDateTime.now().plusHours(1);
+        LocalDateTime endTime = LocalDateTime.now().minusHours(1);
+        when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
+        assertThatThrownBy(() -> bookingSystem.bookRoom("1", startTime, endTime))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Sluttid måste vara efter starttid");
     }
 }
