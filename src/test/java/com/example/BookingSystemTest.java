@@ -1,11 +1,22 @@
 package com.example;
 
-import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class BookingSystemTest {
+
+    @Mock
+    TimeProvider timeProvider;
+
+    @Mock
+    RoomRepository roomRepository;
+
+    @Mock
+    NotificationService notificationService;
+
+    @InjectMocks
+    BookingSystem bookingSystem;
+
 
 
 }
