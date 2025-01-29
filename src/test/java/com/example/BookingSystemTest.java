@@ -89,12 +89,24 @@ class BookingSystemTest {
         String roomId = "1";
         LocalDateTime startTime = LocalDateTime.now().plusDays(1);
         LocalDateTime endTime = startTime.plusHours(1);
-
         when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
         Room room = mock(Room.class);
         when(room.isAvailable(startTime, endTime)).thenReturn(false);
         when(roomRepository.findById(roomId)).thenReturn(Optional.of(room));
         boolean result = bookingSystem.bookRoom(roomId, startTime, endTime);
         assertThat(result).isFalse();
+    }
+
+    @Test
+    void BookRoomRoomIsAvailable() {
+        String roomId = "1";
+        LocalDateTime startTime = LocalDateTime.now().plusDays(1);
+        LocalDateTime endTime = startTime.plusHours(1);
+        when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
+        Room room = mock(Room.class);
+        when(room.isAvailable(startTime, endTime)).thenReturn(true);
+        when(roomRepository.findById(roomId)).thenReturn(Optional.of(room));
+        boolean result = bookingSystem.bookRoom(roomId, startTime, endTime);
+        assertThat(result).isTrue();
     }
 }
