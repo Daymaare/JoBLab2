@@ -6,6 +6,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
@@ -68,5 +69,17 @@ class BookingSystemTest {
         assertThatThrownBy(() -> bookingSystem.bookRoom("1", startTime, endTime))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Sluttid måste vara efter starttid");
+    }
+
+    @Test
+    void BookRoomRoomDoesNotExist() {
+        String roomId = "1";
+        LocalDateTime startTime = LocalDateTime.now().plusDays(1);
+        LocalDateTime endTime = startTime.plusHours(1);
+        when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
+        when(roomRepository.findById(roomId)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> bookingSystem.bookRoom(roomId, startTime, endTime))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Rummet existerar inte");
     }
 }
