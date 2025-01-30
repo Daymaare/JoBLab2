@@ -2,6 +2,8 @@ package com.example;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -27,27 +29,30 @@ class BookingSystemTest {
     @InjectMocks
     BookingSystem bookingSystem;
 
-    @Test
-    void BookRoomStartTimeIsNull() {
+    @ParameterizedTest
+    @NullSource
+    void BookRoomStartTimeIsNull(LocalDateTime startTime) {
         LocalDateTime endTime = LocalDateTime.now().plusHours(1);
-        assertThatThrownBy(() -> bookingSystem.bookRoom("1", null, endTime))
+        assertThatThrownBy(() -> bookingSystem.bookRoom("1", startTime, endTime))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Bokning kräver giltiga start- och sluttider samt rum-id");
     }
 
-    @Test
-    void BookRoomEndTimeIsNull() {
+    @ParameterizedTest
+    @NullSource
+    void BookRoomEndTimeIsNull(LocalDateTime endTime) {
         LocalDateTime startTime = LocalDateTime.now().plusHours(1);
-        assertThatThrownBy(() -> bookingSystem.bookRoom("1", startTime, null))
+        assertThatThrownBy(() -> bookingSystem.bookRoom("1", startTime, endTime))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Bokning kräver giltiga start- och sluttider samt rum-id");
     }
 
-    @Test
-    void BookRoomRoomIdIsNull() {
+    @ParameterizedTest
+    @NullSource
+    void BookRoomRoomIdIsNull(String roomId) {
         LocalDateTime startTime = LocalDateTime.now().plusHours(1);
         LocalDateTime endTime = LocalDateTime.now().plusHours(1);
-        assertThatThrownBy(() -> bookingSystem.bookRoom(null, startTime, endTime))
+        assertThatThrownBy(() -> bookingSystem.bookRoom(roomId, startTime, endTime))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Bokning kräver giltiga start- och sluttider samt rum-id");
     }
