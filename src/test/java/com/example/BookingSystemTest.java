@@ -114,4 +114,11 @@ class BookingSystemTest {
         boolean result = bookingSystem.bookRoom(roomId, startTime, endTime);
         assertThat(result).isTrue();
     }
+
+    @ParameterizedTest
+    @NullSource
+    void GetAvailableRoomsStartTimeIsNull(LocalDateTime startTime) {
+        LocalDateTime endTime = LocalDateTime.now().plusHours(1);
+        assertThatThrownBy(() -> bookingSystem.getAvailableRooms(startTime, endTime)).hasMessageContaining("Måste ange både start- och sluttid");
+    }
 }
