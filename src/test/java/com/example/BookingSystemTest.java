@@ -165,4 +165,12 @@ class BookingSystemTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Boknings-id kan inte vara null");
     }
+
+    @Test
+    void CancelBookingBookingIdIsEmpty() {
+        String bookingId = "1";
+        when(roomRepository.findAll()).thenReturn(List.of());
+        boolean result = bookingSystem.cancelBooking(bookingId);
+        assertThat(result).isFalse();
+    }
 }
