@@ -8,10 +8,12 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -138,7 +140,21 @@ class BookingSystemTest {
         assertThatThrownBy(() -> bookingSystem.getAvailableRooms(startTime, endTime))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Sluttid måste vara efter starttid");
+    }
 
+    @Test
+    void GetAvailableRoomsFindAllRooms() {
+        LocalDateTime startTime = LocalDateTime.now().plusHours(1);
+        LocalDateTime endTime = startTime.plusHours(1);
+        Room room1 = mock(Room.class);
+        Room room2 = mock(Room.class);
+        Room room3 = mock(Room.class);
+        when(room1.isAvailable(startTime, endTime)).thenReturn(true);
+        when(room2.isAvailable(startTime, endTime)).thenReturn(false);
+        when(room3.isAvailable(startTime, endTime)).thenReturn(true);
+        when(roomRepository.findAll()).thenReturn(Arrays.asList(room1, room2, room3));
 
+        List<Room> result = bookingSystem.getAvailableRooms(startTime, endTime);
+        assertThat(result).containsExactly(room1, room3);
     }
 }
