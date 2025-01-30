@@ -1,5 +1,6 @@
 package com.example;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,6 +35,7 @@ class BookingSystemTest {
 
     @ParameterizedTest
     @NullSource
+    @DisplayName("BookRoom - startTime is Null")
     void BookRoomStartTimeIsNull(LocalDateTime startTime) {
         LocalDateTime endTime = LocalDateTime.now().plusHours(1);
         assertThatThrownBy(() -> bookingSystem.bookRoom("1", startTime, endTime))
@@ -43,6 +45,7 @@ class BookingSystemTest {
 
     @ParameterizedTest
     @NullSource
+    @DisplayName("BookRoom - endTime is Null")
     void BookRoomEndTimeIsNull(LocalDateTime endTime) {
         LocalDateTime startTime = LocalDateTime.now().plusHours(1);
         assertThatThrownBy(() -> bookingSystem.bookRoom("1", startTime, endTime))
@@ -52,6 +55,7 @@ class BookingSystemTest {
 
     @ParameterizedTest
     @NullSource
+    @DisplayName("BookRoom - roomID is Null")
     void BookRoomRoomIdIsNull(String roomId) {
         LocalDateTime startTime = LocalDateTime.now().plusHours(1);
         LocalDateTime endTime = LocalDateTime.now().plusHours(1);
@@ -61,7 +65,8 @@ class BookingSystemTest {
     }
 
     @Test
-    void BookRoomTimeIsBefore() {
+    @DisplayName("BookRoom - endTime is before startTime")
+    void BookRoomEndTimeIsBeforeStartTime() {
         LocalDateTime startTime = LocalDateTime.now().minusHours(1);
         LocalDateTime endTime = LocalDateTime.now();
         when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
@@ -71,7 +76,8 @@ class BookingSystemTest {
     }
 
     @Test
-    void BookRoomTimeIsAfter() {
+    @DisplayName("BookRoom - startTime is after endTime")
+    void BookRoomStartTimeIsAfterEndTime() {
         LocalDateTime startTime = LocalDateTime.now().plusHours(1);
         LocalDateTime endTime = LocalDateTime.now().minusHours(1);
         when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
@@ -81,6 +87,7 @@ class BookingSystemTest {
     }
 
     @Test
+    @DisplayName("BookRoom - Room does not exist")
     void BookRoomRoomDoesNotExist() {
         String roomId = "1";
         LocalDateTime startTime = LocalDateTime.now().plusDays(1);
@@ -93,6 +100,7 @@ class BookingSystemTest {
     }
 
     @Test
+    @DisplayName("BookRoom - Room is not available")
     void BookRoomRoomIsNotAvailable() {
         String roomId = "1";
         LocalDateTime startTime = LocalDateTime.now().plusDays(1);
@@ -106,6 +114,7 @@ class BookingSystemTest {
     }
 
     @Test
+    @DisplayName("BookRoom - Room is available")
     void BookRoomRoomIsAvailable() {
         String roomId = "1";
         LocalDateTime startTime = LocalDateTime.now().plusDays(1);
@@ -120,6 +129,7 @@ class BookingSystemTest {
 
     @ParameterizedTest
     @NullSource
+    @DisplayName("GetAvailableRooms - startTime is Null")
     void GetAvailableRoomsStartTimeIsNull(LocalDateTime startTime) {
         LocalDateTime endTime = LocalDateTime.now().plusHours(1);
         assertThatThrownBy(() -> bookingSystem.getAvailableRooms(startTime, endTime))
@@ -128,6 +138,7 @@ class BookingSystemTest {
 
     @ParameterizedTest
     @NullSource
+    @DisplayName("GetAvailableRooms - endTime is Null")
     void GetAvailableRoomsEndTimeIsNull(LocalDateTime endTime) {
         LocalDateTime startTime = LocalDateTime.now().plusHours(1);
         assertThatThrownBy(() -> bookingSystem.getAvailableRooms(startTime, endTime))
@@ -135,6 +146,7 @@ class BookingSystemTest {
     }
 
     @Test
+    @DisplayName("GetAvailableRooms - endTime is before startTime")
     void GetAvailableRoomsEndTimeIsBeforeStartTime() {
         LocalDateTime startTime = LocalDateTime.now().plusHours(1);
         LocalDateTime endTime = startTime.minusHours(1);
@@ -144,6 +156,7 @@ class BookingSystemTest {
     }
 
     @Test
+    @DisplayName("GetAvailableRooms - Find all rooms")
     void GetAvailableRoomsFindAllRooms() {
         LocalDateTime startTime = LocalDateTime.now().plusHours(1);
         LocalDateTime endTime = startTime.plusHours(1);
@@ -161,6 +174,7 @@ class BookingSystemTest {
 
     @ParameterizedTest
     @NullSource
+    @DisplayName("CancelBooking - bookingId is Null")
     void CancelBookingBookingIdIsNull(String bookingId) {
         assertThatThrownBy(() -> bookingSystem.cancelBooking(bookingId))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -168,6 +182,7 @@ class BookingSystemTest {
     }
 
     @Test
+    @DisplayName("CancelBooking - bookingId is empty")
     void CancelBookingBookingIdIsEmpty() {
         String bookingId = "1";
         when(roomRepository.findAll()).thenReturn(List.of());
@@ -176,6 +191,7 @@ class BookingSystemTest {
     }
 
     @Test
+    @DisplayName("CancelBooking - Started or ended booking throws exception")
     void cancelBookingStartedOrEndedBookingThrowsException() {
         String bookingId = "1";
         LocalDateTime startTime = LocalDateTime.now().minusHours(1);
@@ -193,6 +209,7 @@ class BookingSystemTest {
     }
 
     @Test
+    @DisplayName("CancelBooking - Booking is canceled")
     void cancelBookingBookingIsCanceled(){
         String bookingId = "1";
         LocalDateTime startTime = LocalDateTime.now().plusDays(1);
