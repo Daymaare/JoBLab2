@@ -119,13 +119,26 @@ class BookingSystemTest {
     @NullSource
     void GetAvailableRoomsStartTimeIsNull(LocalDateTime startTime) {
         LocalDateTime endTime = LocalDateTime.now().plusHours(1);
-        assertThatThrownBy(() -> bookingSystem.getAvailableRooms(startTime, endTime)).hasMessageContaining("Måste ange både start- och sluttid");
+        assertThatThrownBy(() -> bookingSystem.getAvailableRooms(startTime, endTime))
+                .hasMessageContaining("Måste ange både start- och sluttid");
     }
 
     @ParameterizedTest
     @NullSource
     void GetAvailableRoomsEndTimeIsNull(LocalDateTime endTime) {
         LocalDateTime startTime = LocalDateTime.now().plusHours(1);
-        assertThatThrownBy(() -> bookingSystem.getAvailableRooms(startTime, endTime)).hasMessageContaining("Måste ange både start- och sluttid");
+        assertThatThrownBy(() -> bookingSystem.getAvailableRooms(startTime, endTime))
+                .hasMessageContaining("Måste ange både start- och sluttid");
+    }
+
+    @Test
+    void GetAvailableRoomsEndTimeIsBeforeStartTime() {
+        LocalDateTime startTime = LocalDateTime.now().plusHours(1);
+        LocalDateTime endTime = startTime.minusHours(1);
+        assertThatThrownBy(() -> bookingSystem.getAvailableRooms(startTime, endTime))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Sluttid måste vara efter starttid");
+
+
     }
 }
