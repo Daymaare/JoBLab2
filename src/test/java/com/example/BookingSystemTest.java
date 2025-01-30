@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -172,5 +173,22 @@ class BookingSystemTest {
         when(roomRepository.findAll()).thenReturn(List.of());
         boolean result = bookingSystem.cancelBooking(bookingId);
         assertThat(result).isFalse();
+    }
+
+    @Test
+    void cancelBookingStartedOrEndedBookingThrowsException() {
+        String bookingId = "1";
+        LocalDateTime startTime = LocalDateTime.now().minusHours(1);
+        LocalDateTime endTime = LocalDateTime.now().plusHours(1);
+        Booking booking = new Booking(bookingId, "1", startTime, endTime);
+
+        Room room = mock(Room.class);
+        when(room.hasBooking(bookingId)).thenReturn(true);
+        when(room.getBooking(bookingId)).thenReturn(booking);
+        when(roomRepository.findAll()).thenReturn(Arrays.asList(room));
+        when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
+        assertThatThrownBy(() -> bookingSystem.cancelBooking(bookingId))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Kan inte avboka påbörjad eller avslutad bokning");
     }
 }
