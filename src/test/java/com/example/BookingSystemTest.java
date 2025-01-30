@@ -157,4 +157,12 @@ class BookingSystemTest {
         List<Room> result = bookingSystem.getAvailableRooms(startTime, endTime);
         assertThat(result).containsExactly(room1, room3);
     }
+
+    @ParameterizedTest
+    @NullSource
+    void CancelBookingBookingIdIsNull(String bookingId) {
+        assertThatThrownBy(() -> bookingSystem.cancelBooking(bookingId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Boknings-id kan inte vara null");
+    }
 }
