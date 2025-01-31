@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingCart {
-    private List<Item> items;
+    List<Item> items;
 
     public ShoppingCart() {
         this.items = new ArrayList<Item>();
@@ -22,7 +22,14 @@ public class ShoppingCart {
         this.items.remove(item);
     }
 
-    public double getTotalPrice () {
-     return items.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+    public double getTotalPrice() {
+        return items.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+    }
+
+    public double applyDiscount(double discount) {
+        double totalDiscount = 0.0;
+        for (Item item : items) {
+            totalDiscount += (item.getPrice() * discount) * item.getQuantity();
+        }return getTotalPrice() - totalDiscount;
     }
 }
