@@ -24,10 +24,6 @@ class ShoppingCartTest {
 
     @Test
     void shoppingCartAddItemIncreasesShoppingCart() {
-        when(item.getName()).thenReturn("Apple");
-        when(item.getPrice()).thenReturn(1.0);
-        when(item.getQuantity()).thenReturn(1);
-
         cart.addItem(item);
 
         assertThat(cart.getItems()).hasSize(1);
