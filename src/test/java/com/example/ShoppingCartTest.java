@@ -20,7 +20,7 @@ class ShoppingCartTest {
     private Item item;
 
     @InjectMocks
-    private ShoppingCart shoppingCart;
+    private ShoppingCart cart;
 
     @Test
     void shoppingCartAddItemIncreasesShoppingCart() {
