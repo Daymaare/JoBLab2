@@ -29,4 +29,12 @@ class ShoppingCartTest {
         assertThat(cart.getItems()).hasSize(1);
     }
 
+    @Test
+    void shoppingCartRemoveItemDecreasesShoppingCart() {
+        cart.addItem(item);
+        cart.removeItem(item);
+
+        assertThat(cart.getItems()).isEmpty();
+    }
+
 }
