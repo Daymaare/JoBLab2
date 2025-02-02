@@ -22,6 +22,9 @@ public class ShoppingCart {
     }
 
     public void removeItem(Item item) {
+        if (item == null) {
+            throw new NullPointerException("item är null");
+        }
         this.items.remove(item);
     }
 
@@ -38,6 +41,12 @@ public class ShoppingCart {
     }
 
     public void updateItemQuantity(Item item, int NewQuantity) {
+        if (item == null) {
+            throw new NullPointerException("item är null");
+        }
+        if (NewQuantity < 0) {
+            throw new RuntimeException("Antal kan ej uppdateras till negativt tal");
+        }
         items.stream()
                 .filter(i -> i.equals(item))
                 .forEach(i -> i.setQuantity(NewQuantity));

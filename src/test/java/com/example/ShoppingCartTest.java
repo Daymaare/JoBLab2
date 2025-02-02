@@ -86,6 +86,25 @@ class ShoppingCartTest {
 
     @Test
     void shoppingCartAddingNullItemThrowsNullPointerException() {
-        assertThatThrownBy(() -> cart.addItem(null)).hasMessageContaining("item är null");
+        assertThatThrownBy(() -> cart.addItem(null))
+                .hasMessageContaining("item är null");
+    }
+
+    @Test
+    void shoppingCartRemovingNullItemThrowsNullPointerException() {
+        assertThatThrownBy(() -> cart.removeItem(null))
+                .hasMessageContaining("item är null");
+    }
+
+    @Test
+    void shoppingCartUpdatingNullItemThrowsNullPointerException() {
+        assertThatThrownBy(() -> cart.updateItemQuantity(null, 5))
+                .hasMessageContaining("item är null");
+    }
+
+    @Test
+    void shoppingCartUpdatingQuantityToZeroThrowsRuntimeException() {
+        assertThatThrownBy(() -> cart.updateItemQuantity(item, -1))
+                .hasMessageContaining("Antal kan ej uppdateras till negativt tal");
     }
 }
