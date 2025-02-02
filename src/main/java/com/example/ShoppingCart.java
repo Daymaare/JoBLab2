@@ -32,4 +32,10 @@ public class ShoppingCart {
             totalDiscount += (item.getPrice() * discount) * item.getQuantity();
         }return getTotalPrice() - totalDiscount;
     }
+
+    public void updateItemQuantity(Item item, int NewQuantity) {
+        items.stream()
+                .filter(i -> i.equals(item))
+                .forEach(i -> i.setQuantity(NewQuantity));
+    }
 }

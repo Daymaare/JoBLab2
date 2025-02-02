@@ -65,4 +65,20 @@ class ShoppingCartTest {
         double discount = cart.applyDiscount(0.5);
         assertThat(discount).isEqualTo(25);
     }
+
+    @Test
+    void shoppingCartUpdatingItemQuantityChangesTotalPrice() {
+        Item apple = mock(Item.class);
+
+        when(apple.getPrice()).thenReturn(2.0);
+        when(apple.getQuantity()).thenReturn(2);
+
+        cart.addItem(apple);
+        cart.updateItemQuantity(apple, 5);
+
+        when(apple.getQuantity()).thenReturn(6);
+
+        double totalPrice = cart.getTotalPrice();
+        assertThat(totalPrice).isEqualTo(12.0);
+    }
 }
