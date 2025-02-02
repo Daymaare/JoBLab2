@@ -4,9 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.internal.matchers.Null;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,5 +82,10 @@ class ShoppingCartTest {
 
         double totalPrice = cart.getTotalPrice();
         assertThat(totalPrice).isEqualTo(12.0);
+    }
+
+    @Test
+    void shoppingCartAddingNullItemThrowsNullPointerException() {
+        assertThatThrownBy(() -> cart.addItem(null)).hasMessageContaining("item är null");
     }
 }

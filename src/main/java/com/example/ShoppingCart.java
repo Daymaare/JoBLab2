@@ -11,6 +11,9 @@ public class ShoppingCart {
     }
 
     public void addItem(Item item) {
+        if (item == null) {
+            throw new NullPointerException("item är null");
+        }
         this.items.add(item);
     }
 
@@ -30,7 +33,8 @@ public class ShoppingCart {
         double totalDiscount = 0.0;
         for (Item item : items) {
             totalDiscount += (item.getPrice() * discount) * item.getQuantity();
-        }return getTotalPrice() - totalDiscount;
+        }
+        return getTotalPrice() - totalDiscount;
     }
 
     public void updateItemQuantity(Item item, int NewQuantity) {
